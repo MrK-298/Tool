@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using ConsoleApp1.Data;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace ConsoleApp1
@@ -6,7 +7,6 @@ namespace ConsoleApp1
     public class ExamManager
     {
         private readonly IMongoCollection<Exam> _examCollection;
-        public ObjectId examId = ObjectId.Parse("65f99ba5ea8b4587aebef865");
         public ObjectId questionId;
         public ExamManager()
         {
@@ -14,22 +14,40 @@ namespace ConsoleApp1
             var database = client.GetDatabase("WebTiengAnh");
             _examCollection = database.GetCollection<Exam>("Exam");
         }
-
-        public void AddQuestionToExam(Question question)
+        public void AddExam(Exam exam)
         {
-            var filter = Builders<Exam>.Filter.Eq("_id",examId);
+            _examCollection.InsertOne(exam);
+        }
+        public bool IsExamExists(string examName)
+        {
+            var filter = Builders<Exam>.Filter.Eq(x => x.name, examName);
+            var exam = _examCollection.Find(filter).FirstOrDefault();
+            return exam != null;
+        }
+        public void AddQuestionToExam(Question question, ObjectId examId)
+        {
+            var filter = Builders<Exam>.Filter.Eq("_id", examId);
             var update = Builders<Exam>.Update.Push("Questions", question);
             _examCollection.UpdateOne(filter, update);
             questionId = question.Id;
         }
-        public void AddAnswersToQuestion(List<Answer> answers)
+        public void AddSubquestionToQuestion(SubQuestion subquestion, ObjectId examId)
+        {
+            var filter = Builders<Exam>.Filter.And(
+                Builders<Exam>.Filter.Eq("_id", examId),
+                Builders<Exam>.Filter.ElemMatch(x => x.Questions, q => q.Id == questionId)
+            );
+            var update = Builders<Exam>.Update.Push("Questions.$.SubQuestions", subquestion);
+            _examCollection.UpdateOne(filter, update);
+        }
+        public void AddAnswersToQuestion(List<Answer> answers, ObjectId examId)
         {
             var filter = Builders<Exam>.Filter.And(
                 Builders<Exam>.Filter.Eq("_id", examId),
                 Builders<Exam>.Filter.ElemMatch(x => x.Questions, q => q.Id == questionId)
             );
 
-            var update = Builders<Exam>.Update.Push("Questions.$.Answers", answers);
+            var update = Builders<Exam>.Update.PushEach("Questions.$.Answers", answers);
 
             _examCollection.UpdateOne(filter, update);
         }

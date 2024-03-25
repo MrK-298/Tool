@@ -13,4 +13,8 @@
     <PackageReference Include="Selenium.WebDriver" Version="4.13.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Images\" />
+  </ItemGroup>
+
 </Project>

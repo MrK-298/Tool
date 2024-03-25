@@ -5,12 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleApp1
+namespace ConsoleApp1.Data
 {
     public class Exam
     {
         public ObjectId Id { get; set; }
-        public string Name { get; set; }
+        public string name { get; set; }
+        public bool isGet { get; set; }
         public List<Question> Questions { get; set; }
     }
 }
