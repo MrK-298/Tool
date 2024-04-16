@@ -17,7 +17,7 @@ public class Program
         _examManager = new ExamManager();
         using (IWebDriver driver = new ChromeDriver())
         {
-            driver.Navigate().GoToUrl("https://khoahoc.vietjack.com/thi-online/trac-nghiem-tieng-anh-toeic-part-7-test/103360");
+            driver.Navigate().GoToUrl("https://khoahoc.vietjack.com/thi-online/trac-nghiem-tieng-anh-toeic-part-5-test/102867");
             Thread.Sleep(2000);
             FindExam findExam = new FindExam(_examManager);
             findExam.GoToExam(driver);

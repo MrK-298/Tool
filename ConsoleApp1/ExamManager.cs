@@ -24,6 +24,12 @@ namespace ConsoleApp1
             var exam = _examCollection.Find(filter).FirstOrDefault();
             return exam != null;
         }
+        public Exam findExamById(ObjectId examId)
+        {
+            var filter = Builders<Exam>.Filter.Eq("_id", examId);
+            var exam = _examCollection.Find(filter).FirstOrDefault();
+            return exam;
+        }
         public void AddQuestionToExam(Question question, ObjectId examId)
         {
             var filter = Builders<Exam>.Filter.Eq("_id", examId);

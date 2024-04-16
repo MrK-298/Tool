@@ -11,7 +11,6 @@ namespace ConsoleApp1.Data
     {
         public ObjectId Id { get; set; }
         public string name { get; set; }
-        public bool isGet { get; set; }
         public List<Question> Questions { get; set; }
     }
 }
