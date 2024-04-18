@@ -48,6 +48,7 @@ namespace ConsoleApp1.Function
                     {
                         Id = newID,
                         name = examName,
+                        isDelete = false,
                         Questions = new List<Question>()
                     };
                     _examManager.AddExam(examDB);
